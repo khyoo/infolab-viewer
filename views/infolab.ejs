@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+
+<% include ./headers/header %>
+
+<body>
+    <!-- START OF SIDEBAR DIV -->
+    <div id="sidebar" class="sidebar">
+
+        <!-- Nav tabs -->
+        <div class="sidebar-tabs">
+            <ul role="tablist">
+                <li class="active"><a href="#tracks" role="tab"><i class="fa fa-bars"></i></a></li>
+                <li><a href="#trackTimes" role="tab"><i class="fa fa-play"></i></a></li>
+                <li><a href="#info" role="tab"><i class="fa fa-info-circle"></i></a></li>
+                <li><a href="https://github.com/khyoo/InfoLab" role="tab" target="_blank"><i
+                            class="fa fa-github"></i></a></li>
+            </ul>
+            <ul role="tablist">
+                <li><a href="#settings" role="tab"><i class="fa fa-gear"></i></a></li>
+            </ul>
+        </div>
+
+        <!-- Tab panes -->
+        <div class="sidebar-content" style="width: 300px;word-break: break-all;">
+            <div class="sidebar-pane active" id="tracks">
+                <h2 class="sidebar-header">
+                    Layers & Tracks
+                    <span class="sidebar-close"><i class="fa fa-caret-left"></i></span>
+                </h2>
+                <div id="layers" class="layer-switcher"></div>                
+            </div>
+
+            <div class="sidebar-pane" id="trackTimes">
+                <h2 class="sidebar-header">
+                    TrackTimeLines
+                    <span class="sidebar-close"><i class="fa fa-caret-left"></i></span>
+                </h2>
+            </div>
+
+            <div class="sidebar-pane" id="info">
+                <h2 class="sidebar-header">사용법<span class="sidebar-close"><i class="fa fa-caret-left"></i></span>
+                </h2>
+                <div id="info_content" class="layer-switcher" style="width: 240px;">
+                    <br> URL 쿼리 : <br>
+                    http://[도메인]:3000/geourl?url=[GeoJson URL]
+                    <br>
+                    <br> 예시 : <br>
+                    <a href="http://info.khyoo1221.com:3000/geourl?url=http://info.khyoo1221.com:3000/data/info.geojson"
+                        target="_blank">http://info.khyoo1221.com:3000/geourl?url=http://info.khyoo1221.com:3000/data/info.geojson</a>
+                </div>
+            </div>
+
+            <div class="sidebar-pane" id="settings">
+                <h2 class="sidebar-header">Settings<span class="sidebar-close"><i class="fa fa-caret-left"></i></span>
+                </h2>
+            </div>
+        </div>
+    </div>
+    <!-- END OF SIDEBAR DIV -->
+
+    <!-- DIV pour la carte -->
+    <div id="map" class="sidebar-map"></div>
+    
+    
+    <script type="text/javascript">
+
+        var view = new ol.View({
+            projection: 'EPSG:4326',
+            center: [127.37859894406888, 36.38566643202036],
+            zoom: 19
+        });
+
+        var map = new ol.Map({
+            target: 'map',
+            layers: [
+                new ol.layer.Tile({
+                    // A layer must have a title to appear in the layerswitcher
+                    title: 'VWorld 2D',
+                    // Again set this layer as a base layer
+                    type: 'base',
+                    visible: true,
+                    source: new ol.source.XYZ({
+                        url: 'http://xdworld.vworld.kr:8080/2d/Base/service/{z}/{x}/{y}.png'
+                    })
+                }),
+                new ol.layer.Tile({
+                    // A layer must have a title to appear in the layerswitcher
+                    title: 'VWorld 2D 위성지도',
+                    // Again set this layer as a base layer
+                    type: 'base',
+                    visible: false,
+                    source: new ol.source.XYZ({
+                        url: 'http://xdworld.vworld.kr:8080/2d/Satellite/service/{z}/{x}/{y}.jpeg'
+                    })
+                }),
+                new ol.layer.Tile({
+                    // A layer must have a title to appear in the layerswitcher
+                    title: 'OSM',
+                    // Again set this layer as a base layer
+                    type: 'base',
+                    visible: false,
+                    source: new ol.source.OSM()
+                })
+            ],
+            view: view
+        });
+
+        var sidebar = new ol.control.Sidebar({ element: 'sidebar', position: 'left' });
+        var toc = document.getElementById("layers");
+        ol.control.LayerSwitcher.renderPanel(map, toc);
+        map.addControl(sidebar);
+      
+    </script>
+
+
+</body>
+
+</html>
