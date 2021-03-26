@@ -486,7 +486,45 @@ var LayerSwitcher = function (_Control) {
                     _input.id = checkboxId;
                     _input.checked = lyr.getVisible();
                     _input.indeterminate = lyr.get('indeterminate');
-                    _input.onchange = function (e) {
+                    _input.onchange = function (e) {   
+                        console.log(lyr.getLayers().array_[0]);
+                        for(var a=0; a<lyr.getLayers().array_.length; a++) {
+                            var tempSubLyr;
+                            if (lyr.getLayers().array_[0].values_.title == 'Tracks') {
+                                tempSubLyr = lyr.getLayers().array_[0];
+                                if (e.target.checked) {
+                                    var pathTemp = new Array();                     
+                                    tempLyr = tempSubLyr;
+    
+                                    if (tempSubLyr.values_.source.getState() === 'ready') {
+                                        for (var i = 0; i < tempSubLyr.values_.source.getFeatures().length; i++) {
+                                            pathTemp.push(tempSubLyr.values_.source.getFeatures()[i]);                                    
+                                        }
+                                        pathMap.set(tempSubLyr.ol_uid, pathTemp);
+                                    }
+                                } else {
+                                    pathMap.delete(tempSubLyr.ol_uid);
+                                }
+                            } else {
+                                if (lyr.getLayers().array_[a].getLayers().array_[0].values_.title == 'Tracks') {
+                                    tempSubLyr = lyr.getLayers().array_[a].getLayers().array_[0];
+                                    if (e.target.checked) {
+                                        var pathTemp = new Array();                     
+                                        tempLyr = tempSubLyr;
+        
+                                        if (tempSubLyr.values_.source.getState() === 'ready') {
+                                            for (var i = 0; i < tempSubLyr.values_.source.getFeatures().length; i++) {
+                                                pathTemp.push(tempSubLyr.values_.source.getFeatures()[i]);                                    
+                                            }
+                                            pathMap.set(tempSubLyr.ol_uid, pathTemp);
+                                        }
+                                    } else {
+                                        pathMap.delete(tempSubLyr.ol_uid);
+                                    }
+                                }
+                            }                    
+                        }
+                        
                         LayerSwitcher.setVisible_(map, lyr, e.target.checked, options.groupSelectStyle);
                         render(lyr);
                     };
@@ -517,18 +555,20 @@ var LayerSwitcher = function (_Control) {
                     if (lyr.values_.type == 'base') {
                         
                     } else {
-                        if (e.target.checked) {
-                            var pathTemp = new Array();                     
-                            tempLyr = lyr;
+                        if (lyr.values_.title == 'Tracks') {
+                            if (e.target.checked) {
+                                var pathTemp = new Array();                     
+                                tempLyr = lyr;
 
-                            if (lyr.values_.source.getState() === 'ready') {
-                                for (var i = 0; i < lyr.values_.source.getFeatures().length; i++) {
-                                    pathTemp.push(lyr.values_.source.getFeatures()[i]);                                    
+                                if (lyr.values_.source.getState() === 'ready') {
+                                    for (var i = 0; i < lyr.values_.source.getFeatures().length; i++) {
+                                        pathTemp.push(lyr.values_.source.getFeatures()[i]);                                    
+                                    }
+                                    pathMap.set(lyr.ol_uid, pathTemp);
                                 }
-                                pathMap.set(lyr.ol_uid, pathTemp);
+                            } else {
+                                pathMap.delete(lyr.ol_uid);
                             }
-                        } else {
-                            pathMap.delete(lyr.ol_uid);
                         }
                     }
                     LayerSwitcher.setVisible_(map, lyr, e.target.checked, options.groupSelectStyle);
