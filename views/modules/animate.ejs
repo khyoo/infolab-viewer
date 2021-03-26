@@ -1,0 +1,38 @@
+<script type="text/javascript">
+
+    var path = new Array();    
+    var pathMap = new Map();
+    var tempLyr;
+
+    var tStyle = new ol.style.Style({
+        image: new ol.style.Circle({
+            radius: 5,
+            snapToPixel: false,
+            fill: new ol.style.Fill({ color: 'white' }),
+            stroke: new ol.style.Stroke({
+                color: '#ff0000',
+                width: 2
+            })
+        })
+    })
+   
+    // Add a feature on the map
+    var f, anim;
+    function animateFeature(a) {
+        if (path.length > 0) {
+            f = new ol.Feature(new ol.geom.Point([0, 0]));
+            f.setStyle(tStyle);
+            
+            anim = new ol.featureAnimation.Path({
+                path: path[a],
+                rotate: false,
+                easing: ol.easing['inAndOut'],
+                speed: Number(0.0000001),
+                revers: false
+            });
+
+            tempLyr.animateFeature(f, anim);
+        }
+    }
+
+</script>

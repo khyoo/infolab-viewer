@@ -514,6 +514,23 @@ var LayerSwitcher = function (_Control) {
                 input.checked = lyr.get('visible');
                 input.indeterminate = lyr.get('indeterminate');
                 input.onchange = function (e) {
+                    if (lyr.values_.type == 'base') {
+                        
+                    } else {
+                        if (e.target.checked) {
+                            var pathTemp = new Array();                     
+                            tempLyr = lyr;
+
+                            if (lyr.values_.source.getState() === 'ready') {
+                                for (var i = 0; i < lyr.values_.source.getFeatures().length; i++) {
+                                    pathTemp.push(lyr.values_.source.getFeatures()[i]);                                    
+                                }
+                                pathMap.set(lyr.ol_uid, pathTemp);
+                            }
+                        } else {
+                            pathMap.delete(lyr.ol_uid);
+                        }
+                    }
                     LayerSwitcher.setVisible_(map, lyr, e.target.checked, options.groupSelectStyle);
                     render(lyr);
                 };

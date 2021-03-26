@@ -10,10 +10,10 @@
         <!-- Nav tabs -->
         <div class="sidebar-tabs">
             <ul role="tablist">
-                <li class="active"><a href="#tracks" role="tab"><i class="fa fa-bars"></i></a></li>
+                <li class="active"><a href="#tracks" role="tab"><i class="fa fa-map"></i></a></li>
                 <li><a href="#trackTimes" role="tab"><i class="fa fa-play"></i></a></li>
-                <li><a href="#info" role="tab"><i class="fa fa-info-circle"></i></a></li>
-                <li><a href="https://github.com/khyoo/InfoLab" role="tab" target="_blank"><i
+                <li><a href="#info" role="tab"><i class="fa fa-plus"></i></a></li>
+                <li><a href="https://github.com/khyoo/infolab-viewer" role="tab" target="_blank"><i
                             class="fa fa-github"></i></a></li>
             </ul>
             <ul role="tablist">
@@ -39,16 +39,10 @@
             </div>
 
             <div class="sidebar-pane" id="info">
-                <h2 class="sidebar-header">사용법<span class="sidebar-close"><i class="fa fa-caret-left"></i></span>
-                </h2>
-                <div id="info_content" class="layer-switcher" style="width: 240px;">
-                    <br> URL 쿼리 : <br>
-                    http://[도메인]:3000/geourl?url=[GeoJson URL]
-                    <br>
-                    <br> 예시 : <br>
-                    <a href="http://info.khyoo1221.com:3000/geourl?url=http://info.khyoo1221.com:3000/data/info.geojson"
-                        target="_blank">http://info.khyoo1221.com:3000/geourl?url=http://info.khyoo1221.com:3000/data/info.geojson</a>
-                </div>
+                <h2 class="sidebar-header">
+                    Track Insert
+                    <span class="sidebar-close"><i class="fa fa-caret-left"></i></span>
+                </h2>                
             </div>
 
             <div class="sidebar-pane" id="settings">
@@ -106,13 +100,15 @@
             view: view
         });
 
-        var sidebar = new ol.control.Sidebar({ element: 'sidebar', position: 'left' });
-        var toc = document.getElementById("layers");
-        ol.control.LayerSwitcher.renderPanel(map, toc);
-        map.addControl(sidebar);
+        
       
     </script>
 
+<% include ./modules/layers %>
+
+<% include ./modules/contextMenu %>
+
+<% include ./modules/animate %>
 
 </body>
 
