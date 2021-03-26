@@ -11,9 +11,10 @@
             fill: new ol.style.Fill({ color: 'white' }),
             stroke: new ol.style.Stroke({
                 color: '#ff0000',
-                width: 2
+                width: 2                
             })
-        })
+        }),
+
     })
    
     // Add a feature on the map
@@ -22,7 +23,7 @@
         if (path.length > 0) {
             f = new ol.Feature(new ol.geom.Point([0, 0]));
             f.setStyle(tStyle);
-            
+                        
             anim = new ol.featureAnimation.Path({
                 path: path[a],
                 rotate: false,
@@ -31,6 +32,7 @@
                 revers: false
             });
 
+            tempLyr.setZIndex(1000);
             tempLyr.animateFeature(f, anim);
         }
     }
