@@ -529,11 +529,28 @@ var LayerSwitcher = function (_Control) {
                         render(lyr);
                     };
                     li.appendChild(_input);
-                    label.htmlFor = checkboxId;
+                    label.htmlFor = checkboxId;                    
                 }
 
                 label.innerHTML = lyrTitle;
                 li.appendChild(label);
+
+                if (lyr.get('groupClass') === 'top') {
+                    var trashSpan = document.createElement('span'); 
+                    trashSpan.style.position = "absolute";
+                    trashSpan.style.right = "10px";
+                    trashSpan.style.marginTop = "3px";
+
+                    var trashBtn = document.createElement('i');
+                    trashBtn.className = "fa fa-trash fa-lg";
+                    trashBtn.onclick = function () {
+                        
+                    };
+                    
+                    trashSpan.appendChild(trashBtn);                        
+                    li.appendChild(trashSpan);
+                }
+
                 var ul = document.createElement('ul');
                 li.appendChild(ul);
 
@@ -583,7 +600,6 @@ var LayerSwitcher = function (_Control) {
                 if (rsl > lyr.getMaxResolution() || rsl < lyr.getMinResolution()) {
                     label.className += ' disabled';
                 }
-
                 li.appendChild(label);
             }
 

@@ -33,6 +33,7 @@
         var temp = new ol.layer.Group({
             // A layer must have a title to appear in the layerswitcher
             title: tracks[i].name,
+            groupClass: 'top',
             // Adding a 'fold' property set to either 'open' or 'close' makes the group layer
             // collapsible
             fold: 'open'
@@ -155,7 +156,7 @@
                 }),
                 source: pointSrc
             }));
-
+            console.log(innerSubGroups[i]);
             var temp = new ol.layer.Group({
                 // A layer must have a title to appear in the layerswitcher
                 title: trackObj[i].class_id,
