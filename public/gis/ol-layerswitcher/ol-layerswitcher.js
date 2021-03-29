@@ -544,7 +544,21 @@ var LayerSwitcher = function (_Control) {
                     var trashBtn = document.createElement('i');
                     trashBtn.className = "fa fa-trash fa-lg";
                     trashBtn.onclick = function () {
-                        
+                        if(confirm("Do you want to delete the '"+ lyrTitle +"' layer?")) {
+                            $.ajax({
+                                dataType: 'json',
+                                url: 'http://localhost:8880/rest/mfcollection/'+lyrTitle,
+                                type: 'DELETE',
+                                async: false,
+                                success: function (result) {
+                                    alert("The selected layer was deleted!");
+                                    window.location.reload();
+                                },
+                                error: function (request, status, error) {
+                                    alert("REST API로부터 데이터를 받아올 수 없습니다.");
+                                }
+                            });
+                        }
                     };
                     
                     trashSpan.appendChild(trashBtn);                        

@@ -59,10 +59,10 @@
             type: 'GET',
             async: false,
             success: function (result) {
-                if (result instanceof Object) {
+                if (result instanceof Object && result.collections != null) {
                     trackObj = result.collections.slice();
                 } else {
-
+                    trackObj = [];
                 }
             },
             error: function (request, status, error) {
