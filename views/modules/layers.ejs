@@ -1,13 +1,5 @@
 <script type="text/javascript">
 
-    var geoTracks = 'http://info.rlog.kr:8880/rest/mfcollections';    
-
-    //var geoEtriURL = 'http://info.rlog.kr:8880/rest/mfcollection/track_etri_1221_1';
-    //var geoKnuURL = 'http://info.rlog.kr:8880/rest/mfcollection/track_knu_1221_1';
-
-    var geoEtriURL = '/data/track_etri.geojson';
-    var geoKnuURL = '/data/track_knu.geojson';
-
     var tracks, trackObj;
 
     $.ajax({
@@ -41,8 +33,6 @@
         mainGroups.push(temp);
     }
 
-    var geoTrackObjAbbr = 'http://info.rlog.kr:8880/rest/mfcollectionAbbr/';
-    var geoTrackObj = 'http://info.rlog.kr:8880/rest/mfcollection/';
     var subGroups;
     var innerGroups;
 
@@ -70,66 +60,15 @@
             }
         });
 
-        for(var i=0; i<trackObj.length; i++) {
-            var trackSrc, pointSrc;
-
-            $.ajax({
-                dataType: 'json',
-                url: geoTrackObj+item.values_.title+'?classId='+trackObj[i].class_id,
-                type: 'GET',
-                async: false,
-                success: function (result) {
-                    if (result instanceof Object) {                        
-                        if (result.features != null) {
-                            trackSrc = new ol.source.Vector({
-                                features: (new ol.format.GeoJSON()).readFeatures(result)
-                            });
-                            //console.log(result);
-                            pointSrc = new ol.source.Vector({});
-
-                            for (var j = 0; j < result.features.length; j++) {
-                                var pt_len = result.features[j].geometry.coordinates.length;
-
-                                var tempIdx = 0;
-                                while(tempIdx<pt_len) {
-                                    if (tempIdx<pt_len) {
-                                        var pointFeature = new ol.Feature({
-                                            geometry: new ol.geom.Point(result.features[j].geometry.coordinates[tempIdx]),
-                                            track_id: result.features[j].properties.track_id,
-                                            class_id: result.features[j].properties.class_id,
-                                            video_uri_id: result.features[j].properties.video_uri_id
-                                        });
-                                        pointSrc.addFeature(pointFeature);
-
-                                        tempIdx += 40;
-                                    } 
-                                    
-                                    if (tempIdx>=pt_len) {
-                                        var pointFeature = new ol.Feature({
-                                            geometry: new ol.geom.Point(result.features[j].geometry.coordinates[pt_len-1]),
-                                            track_id: result.features[j].properties.track_id,
-                                            class_id: result.features[j].properties.class_id,
-                                            video_uri_id: result.features[j].properties.video_uri_id
-                                        });
-                                        pointSrc.addFeature(pointFeature);
-                                    }                
-                                }    
-                            }
-                        }
-                    } else {
-                        console.log("22");
-                    }
-                },
-                error: function (request, status, error) {
-                    alert("REST API로부터 데이터를 받아올 수 없습니다.");
-                }
-            });
-
+        for(var i=0; i<trackObj.length; i++) {          
             var colorCode = "#" + Math.round(Math.random() * 0xffffff).toString(16);
 
             innerSubGroups[i] = new ol.Collection();
             innerSubGroups[i].push(new ol.layer.Vector({
                 title: 'Tracks',
+                mainTitle: item.get('title'),
+                subTitle: trackObj[i].class_id,
+                groupClass: 'bottom',
                 visible: false,
                 zIndex: 100,        
                 style: new ol.style.Style({
@@ -138,10 +77,13 @@
                         width: 2
                     })
                 }),
-                source: trackSrc
+                source: null
             }));
             innerSubGroups[i].push(new ol.layer.Vector({
                 title: 'Points',
+                mainTitle: item.get('title'),
+                subTitle: trackObj[i].class_id,
+                groupClass: 'bottom',
                 visible: false,
                 zIndex: 100,              
                 style: new ol.style.Style({                                
@@ -154,9 +96,9 @@
                         })
                     })
                 }),
-                source: pointSrc
+                source: null
             }));
-            console.log(innerSubGroups[i]);
+            
             var temp = new ol.layer.Group({
                 // A layer must have a title to appear in the layerswitcher
                 title: trackObj[i].class_id,
