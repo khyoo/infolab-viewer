@@ -1,0 +1,48 @@
+<script type="text/javascript">
+
+    // A dialog inside a map
+    var dialogMap = new ol.control.Dialog({ hideOnClick: true, className: 'center' });
+    map.addControl(dialogMap);
+
+    // Prompt dialog
+    var dialogPrompt = new ol.control.Dialog();
+   
+    dialogPrompt.on('button', function (e) {
+        if (e.button === 'submit') {
+            if (deleteNum != document.getElementById("delNum").value) {
+                dialogMap.show('Please enter a value correctly.');
+            } else {
+                dialogMap.show('The selected layer was deleted!');
+            }
+        }
+    });
+    dialogPrompt.on('show', function () {
+        dialogMap.close();
+    });
+    map.addControl(dialogPrompt);
+
+
+    // Progress dialog
+    var dialogProgress = new ol.control.Dialog();
+    dialogProgress.setContent({
+        content: 'Processing...',
+        title: 'Progress',
+        max: 10
+    });
+    dialogProgress.on('show', function () {
+        dialogMap.close();
+        function step(i) {
+            dialogProgress.setProgress(i);
+            if (i < 10) {
+                setTimeout(function () {
+                    step(i + 1);
+                }, 500);
+            } else {
+                dialogMap.show('End of progress...');
+                dialogProgress.hide();
+            }
+        }
+        step(0);
+    });
+    map.addControl(dialogProgress);
+</script>
