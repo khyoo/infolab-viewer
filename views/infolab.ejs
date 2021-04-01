@@ -2,7 +2,30 @@
 <html lang="en">
 
 <% include ./headers/header %>
+<script type="text/javascript">
+function fn_submit(){
+    if($("#insertScript").val() == ""){
+        alert("Script 영역에 JSON Script를 입력하십시오.");
+        return;
+    }
 
+    $.ajax({        
+        url: 'http://localhost:8880/rest/mfcollections',
+        async: false,
+        type: 'POST',
+        data: $("#insertScript").val(),
+        dataType: 'json',        
+        contentType: "application/json",
+        success: function (result) {
+            alert("Track insert is success.");
+            window.location.reload();
+        },
+        error: function (request, status, error) {
+            alert("REST API로부터 데이터를 받아올 수 없습니다.");
+        }
+    });
+}
+</script>
 <body>
     <!-- START OF SIDEBAR DIV -->
     <div id="sidebar" class="sidebar">
@@ -42,7 +65,35 @@
                 <h2 class="sidebar-header">
                     Track Insert
                     <span class="sidebar-close"><i class="fa fa-caret-left"></i></span>
-                </h2>                
+                </h2>         
+                <div id="trackInsert">                    
+                    <div style="margin-top:10px;margin-bottom:20px;">Track Insert(JSON)</div>
+                    <textarea id="insertScript" cols="33" rows="30" placeholder="Script 영역"></textarea>
+                    <div><button type="button" style="background-color: #4CAF50;" onclick="javascript:fn_submit()">Create!</button></div>                    
+                    <div style="margin-top:10px;margin-bottom:20px;">Sample</div>
+                    <div style="width:250px;border:1px solid black">{
+                        <br>&nbsp;&nbsp;
+                            "name":"track_sample_1221",
+                        <br>&nbsp;&nbsp;
+                            "type":"Feature",
+                        <br>&nbsp;&nbsp;
+                            "properties":[
+                        <br>&nbsp;&nbsp;&nbsp;&nbsp;
+                                {"name":"id", "type":"integer"},
+                        <br>&nbsp;&nbsp;&nbsp;&nbsp;
+                                {"name":"class_id", "type":"text"}
+                        <br>&nbsp;&nbsp;
+                            ],
+                        <br>&nbsp;&nbsp;
+                            "geometry":[
+                        <br>&nbsp;&nbsp;&nbsp;&nbsp;
+                                {"name":"geo1", "type":"LineString"}
+                        <br>&nbsp;&nbsp;
+                            ]
+                        <br>
+                        }
+                    </div>
+                </div>       
             </div>
 
             <div class="sidebar-pane" id="settings">

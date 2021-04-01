@@ -12,7 +12,19 @@
             if (deleteNum != document.getElementById("delNum").value) {
                 dialogMap.show('Please enter a value correctly.');
             } else {
-                dialogMap.show('The selected layer was deleted!');
+                $.ajax({
+                    dataType: 'json',
+                    url: geoTrackObj + deleteNum,
+                    type: 'DELETE',
+                    async: false,
+                    success: function (result) {
+                        alert('The selected layer was deleted!');
+                        window.location.reload();
+                    },
+                    error: function (request, status, error) {
+                        alert("REST API로부터 데이터를 받아올 수 없습니다.");
+                    }
+                });
             }
         }
     });
