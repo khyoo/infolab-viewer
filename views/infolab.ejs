@@ -10,7 +10,7 @@ function fn_submit(){
     }
 
     $.ajax({        
-        url: 'http://localhost:8880/rest/mfcollections',
+        url: geoTracks,
         async: false,
         type: 'POST',
         data: $("#insertScript").val(),
