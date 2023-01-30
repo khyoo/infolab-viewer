@@ -122,4 +122,16 @@
     ol.control.LayerSwitcher.renderPanel(map, toc);
     map.addControl(sidebar);
 
+// Create layer
+var roadAllPOISource = new ol.source.XYZ({
+    url: 'http://info.rlog.kr:8077/geoserver/gwc/service/tms/1.0.0/infolab%3AMOCT_LINK@EPSG%3A900913@png/{z}/{x}/{-y}.png'
+  });
+  var roadAllPOIVector = new ol.layer.Tile({
+    title: '전체 도로 Point',
+    visible: true,
+    source: roadAllPOISource,    
+    maxResolution: 15,
+    zIndex: 1000
+  });
+  map.addLayer(roadAllPOIVector);
 </script>
