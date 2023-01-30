@@ -110,10 +110,29 @@ function fn_submit(){
     
     <script type="text/javascript">
 
+      var projection = ol.proj.get('EPSG:4326');
+      var projectionExtent = projection.getExtent();
+      var mapExtent =  [-105.70160457542876, 39.799058451017345, -104.99644707392322, 40.301219114868005];
+      var matrixIds = new Array(22);
+
+      for (var z = 0; z < 22; ++z) {
+        matrixIds[z] = "EPSG:4326:" + z;;
+      }
+
+      resolutions = [
+            0.703125, 0.3515625, 0.17578125, 0.087890625,
+            0.0439453125, 0.02197265625, 0.010986328125,
+            0.0054931640625, 0.00274658203125, 0.001373291015625,
+            6.866455078125E-4, 3.4332275390625E-4, 1.71661376953125E-4,
+            8.58306884765625E-5, 4.291534423828125E-5, 2.1457672119140625E-5,
+              1.0728836059570312E-5, 5.364418029785156E-6, 2.682209014892578E-6,
+            1.341104507446289E-6, 6.705522537231445E-7, 3.3527612686157227E-7
+      ];
+
         var view = new ol.View({
             projection: 'EPSG:4326',
             center: [127.37859894406888, 36.38566643202036],
-            zoom: 19
+            zoom: 3
         });
 
         var map = new ol.Map({
@@ -124,7 +143,7 @@ function fn_submit(){
                     title: 'VWorld 2D',
                     // Again set this layer as a base layer
                     type: 'base',
-                    visible: true,
+                    visible: false,
                     source: new ol.source.XYZ({
                         url: 'http://xdworld.vworld.kr:8080/2d/Base/service/{z}/{x}/{y}.png'
                     })
@@ -134,9 +153,18 @@ function fn_submit(){
                     title: 'VWorld 2D 위성지도',
                     // Again set this layer as a base layer
                     type: 'base',
-                    visible: false,
-                    source: new ol.source.XYZ({
-                        url: 'http://xdworld.vworld.kr:8080/2d/Satellite/service/{z}/{x}/{y}.jpeg'
+                    visible: true,
+                    source: new ol.source.WMTS({
+                    url: 'http://info.rlog.kr:8077/geoserver/gwc/service/wmts',
+                      layer: 'infolab:data-00013',
+                      matrixSet: 'EPSG:4326',
+                      format: 'image/png',
+                      projection: projection,
+                      tileGrid: new ol.tilegrid.WMTS({
+                        origin: ol.extent.getTopLeft(projectionExtent),
+                        resolutions: resolutions,
+                        matrixIds: matrixIds
+                      })
                     })
                 }),
                 new ol.layer.Tile({
@@ -159,12 +187,15 @@ function fn_submit(){
 
 <% include ./modules/interaction %>
 
+<!--
 <% include ./modules/contextMenu %>
 
 <% include ./modules/animate %>
 
 <% include ./modules/misc %>
-
+-->
 </body>
 
 </html>
+
+
