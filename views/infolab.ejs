@@ -140,13 +140,13 @@ function fn_submit(){
             layers: [
                 new ol.layer.Tile({
                     // A layer must have a title to appear in the layerswitcher
-                    title: 'VWorld 2D',
+                    title: 'VWorld 2D 위성지도1',
                     // Again set this layer as a base layer
                     type: 'base',
                     visible: false,
-                    source: new ol.source.XYZ({
-                        url: 'http://xdworld.vworld.kr:8080/2d/Base/service/{z}/{x}/{y}.png'
-                    })
+                    source: new ol.source.XYZ({                                  
+                        url: 'http://info.rlog.kr:8077/geoserver/gwc/service/tms/1.0.0/infolab%3AMOCT_LINK@EPSG%3A900913@png/{z}/{x}/{-y}.png'
+                  })
                 }),
                 new ol.layer.Tile({
                     // A layer must have a title to appear in the layerswitcher
